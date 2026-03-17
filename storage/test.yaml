@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lamp-wp
+  name: lamp-wp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lamp-wp
+  template:
+    metadata:
+      labels:
+        app: lamp-wp
+    spec:
+      containers:
+      - image: webdevops/php-apache:alpine-3-php7
+        name: httpd-php-container
+        volumeMounts:
+        - name: php-volume
+          mountPath: /opt/docker/etc/php/php.ini             
+
+      - image: mysql:5.6
+        name: mysql-container
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-root-pass
+              key: password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name:
+              key:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user-pass
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user-pass
+              key: password
+      
+      volumes:
+      - name: php-volume
+        configMap:
+          name: php-config
+
+
+
+
+
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_PORT=tcp://10.43.0.1:443
+HOSTNAME=lamp-wp-d95cd6c4d-gbj4l
+MYSQL_MAJOR=5.6
+HOME=/root
+MYSQL_ROOT_PASSWORD=R00t
+TERM=xterm
+KUBERNETES_PORT_443_TCP_ADDR=10.43.0.1
+MYSQL_PASSWORD=B4zNgHA7Ya
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MYSQL_VERSION=5.6.51-1debian9
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+MYSQL_USER=kodekloud_tim
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT_443_TCP=tcp://10.43.0.1:443
+GOSU_VERSION=1.12
+KUBERNETES_SERVICE_HOST=10.43.0.1
+PWD=/
+MYSQL_DATABASE=kodekloud_db8
+# exit
